@@ -15,13 +15,14 @@ namespace SneakerStoreAPI.Controllers
         {
             _context = context;
         }
-        [HttpGet]
+
+        [Microsoft.AspNetCore.Mvc.HttpGet]
         public async Task<ActionResult<IEnumerable<Sneaker>>> GetSneakers()
         {
             return await _context.Sneakers.ToListAsync();
         }
 
-        [HttpGet("{id}")]
+        [Microsoft.AspNetCore.Mvc.HttpGet("{id}")]
         public async Task<ActionResult<IEnumerable<Sneaker>>> GetSneaker(int id)
         {
             var sneaker = await _context.Sneakers.FindAsync(id);
@@ -33,7 +34,7 @@ namespace SneakerStoreAPI.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpPost]
+        [System.Web.Http.HttpPost]
         public async Task<ActionResult<IEnumerable<Sneaker>>> AddSneaker(Sneaker sneaker)
         {
             _context.Sneakers.Add(sneaker);
@@ -41,7 +42,7 @@ namespace SneakerStoreAPI.Controllers
             return CreatedAtAction(nameof(GetSneaker), new { id = sneaker.Id }, sneaker);
         }
 
-        [HttpPut("{id}")]
+        [Microsoft.AspNetCore.Mvc.HttpPut("{id}")]
         public async Task<IActionResult> UpdateSneaker(int id, Sneaker sneaker)
         {
             if (id != sneaker.Id)
@@ -59,7 +60,8 @@ namespace SneakerStoreAPI.Controllers
             }
             return NoContent();
         }
-        [HttpDelete("{id}")]
+
+        [Microsoft.AspNetCore.Mvc.HttpDelete("{id}")]
         public async Task<ActionResult<IEnumerable<Sneaker>>> DeleteSneaker(int id)
         {
             var sneaker = await _context.Sneakers.FindAsync(id);
