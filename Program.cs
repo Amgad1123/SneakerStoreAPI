@@ -1,9 +1,10 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using SneakerStoreAPI.Models;
-using System.Security.Cryptography;
+using System.Security.Claims;
 using System.Text;
 
 namespace SneakerStoreAPI
@@ -13,66 +14,104 @@ namespace SneakerStoreAPI
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
- 
 
-            // Add services to the container.
-            builder.Services.AddControllers();
-            builder.Services.AddOpenApi();
+            // Load JWT secret from config
+            var jwtSecret = builder.Configuration["JwtSettings:Secret"];
+            if (string.IsNullOrWhiteSpace(jwtSecret))
+                throw new Exception("JWT Secret is missing from configuration.");
 
-            // Fix: Ensure AppDbContext is correctly configured and inherits from DbContext
-            builder.Services.AddDbContext<AppDbContext>(options =>
-                options.UseSqlServer(
-                    builder.Configuration.GetConnectionString("DefaultConnection")
-                )
-            );
-
-            // Fix: Add the missing SwaggerGen service
-            builder.Services.AddSwaggerGen(c =>
+            byte[] keyBytes;
+            try
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "SneakerStoreAPI", Version = "v1" });
-            });
+                keyBytes = Convert.FromBase64String(jwtSecret);
+            }
+            catch
+            {
+                keyBytes = Encoding.UTF8.GetBytes(jwtSecret);
+            }
 
-            // Configure Authentication & JWT
-            var key = Encoding.UTF8.GetBytes("Y5qFaQ7MsDNCg5R6ObZGCDdjaP+O2UGCKVf7LAaAjDw=");
+            if (keyBytes.Length < 32)
+                throw new Exception("JWT Secret must be at least 32 bytes.");
+
+            var symmetricKey = new SymmetricSecurityKey(keyBytes);
+
+           
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(key),
+                        IssuerSigningKey = symmetricKey,
                         ValidateIssuer = false,
-                        ValidateAudience = false
+                        ValidateAudience = false,
+                        ValidateLifetime = true,
+                        ClockSkew = TimeSpan.Zero
                     };
                 });
 
-            builder.Services.AddEndpointsApiExplorer();
 
-            builder.Services.AddAuthorization(options =>
+            
+            builder.Services.AddDbContext<AppDbContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
+            );
+
+           
+            builder.Services.AddControllers();
+
+            // 🔹 Swagger Setup with JWT Authentication
+            builder.Services.AddSwaggerGen(c =>
             {
-                options.AddPolicy("AdminOnly", policy => policy.RequireRole("Admin"));
-                options.AddPolicy("CustomerOnly", policy => policy.RequireRole("Customer"));
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Sneaker Store API", Version = "v1" });
+
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Description = "Enter JWT like: Bearer {your token}",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.Http,
+                    Scheme = "Bearer"
+                });
+
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            }
+                        },
+                        Array.Empty<string>()
+                    }
+                });
+            });
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowFrontend",
+                    policy => policy.WithOrigins("http://localhost:3000") // ✅ Allow React frontend
+                                    .AllowAnyMethod()
+                                    .AllowAnyHeader());
             });
             var app = builder.Build();
 
-            // Enable Swagger UI
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
-
-                // Configure the HTTP request pipeline.
-                if (app.Environment.IsDevelopment())
-                {
-                    app.MapOpenApi();
-                }
             }
 
             app.UseHttpsRedirection();
+            app.UseCors("AllowFrontend");
+            app.UseAuthentication();
             app.UseAuthorization();
+
+          
+
             app.MapControllers();
             app.Run();
         }
     }
 }
-    

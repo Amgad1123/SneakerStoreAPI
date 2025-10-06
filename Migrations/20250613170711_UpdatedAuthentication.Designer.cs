@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace SneakerStoreAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250613170711_UpdatedAuthentication")]
+    partial class UpdatedAuthentication
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -126,104 +129,6 @@ namespace SneakerStoreAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Sneakers");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 13,
-                            Brand = "Jordan",
-                            ImageUrl = "https://cdn.flightclub.com/TEMPLATE/011502/1.jpg?w=1920",
-                            Name = "Retro Cement 3",
-                            Price = 300m
-                        },
-                        new
-                        {
-                            Id = 14,
-                            Brand = "Jordan",
-                            ImageUrl = "https://cdn.flightclub.com/TEMPLATE/307016/1.jpg?w=1920",
-                            Name = "Air Jordan 1",
-                            Price = 300m
-                        },
-                        new
-                        {
-                            Id = 15,
-                            Brand = "Nike",
-                            ImageUrl = "https://cdn.flightclub.com/TEMPLATE/253215/1.jpg?w=1920",
-                            Name = "Nike Dunk Low",
-                            Price = 120m
-                        },
-                        new
-                        {
-                            Id = 16,
-                            Brand = "Adidas",
-                            ImageUrl = "https://cdn.flightclub.com/TEMPLATE/368573/1.jpg?w=1920",
-                            Name = "Yeezy Boost 350",
-                            Price = 200m
-                        },
-                        new
-                        {
-                            Id = 17,
-                            Brand = "New Balance",
-                            ImageUrl = "https://cdn.flightclub.com/TEMPLATE/371711/1.jpg?w=1920",
-                            Name = "New Balance 550",
-                            Price = 110m
-                        },
-                        new
-                        {
-                            Id = 18,
-                            Brand = "Adidas",
-                            ImageUrl = "https://cdn.flightclub.com/TEMPLATE/460574/1.jpg?w=1920",
-                            Name = "Adidas Samba OG",
-                            Price = 90m
-                        },
-                        new
-                        {
-                            Id = 19,
-                            Brand = "Puma",
-                            ImageUrl = "https://cdn.flightclub.com/TEMPLATE/397161/1.jpg?w=1920",
-                            Name = "Puma RS-X",
-                            Price = 100m
-                        },
-                        new
-                        {
-                            Id = 20,
-                            Brand = "Converse",
-                            ImageUrl = "https://cdn.flightclub.com/TEMPLATE/301688/1.jpg?w=1920",
-                            Name = "Converse Chuck 70",
-                            Price = 75m
-                        },
-                        new
-                        {
-                            Id = 21,
-                            Brand = "Reebok",
-                            ImageUrl = "https://cdn.flightclub.com/TEMPLATE/363222/1.jpg?w=1920",
-                            Name = "Reebok Club C 85",
-                            Price = 85m
-                        },
-                        new
-                        {
-                            Id = 22,
-                            Brand = "Asics",
-                            ImageUrl = "https://cdn.flightclub.com/TEMPLATE/389891/1.jpg?w=1920",
-                            Name = "Asics Gel-Lyte III",
-                            Price = 95m
-                        },
-                        new
-                        {
-                            Id = 23,
-                            Brand = "Vans",
-                            ImageUrl = "https://cdn.flightclub.com/TEMPLATE/350502/1.jpg?w=1920",
-                            Name = "Vans Old Skool",
-                            Price = 70m
-                        },
-                        new
-                        {
-                            Id = 24,
-                            Brand = "New Balance",
-                            ImageUrl = "https://cdn.flightclub.com/TEMPLATE/350162/1.jpg?w=1920",
-                            Name = "New Balance 2002R",
-                            Price = 160m
-                        });
                 });
 
             modelBuilder.Entity("SneakerStoreAPI.Models.User", b =>
@@ -241,6 +146,12 @@ namespace SneakerStoreAPI.Migrations
                     b.Property<string>("PasswordHash")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(max)")
+                        .HasDefaultValue("Customer");
 
                     b.HasKey("Id");
 

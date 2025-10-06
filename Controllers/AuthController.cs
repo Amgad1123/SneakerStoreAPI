@@ -5,6 +5,8 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using BCrypt.Net;
 using System.Text;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.Web.Services3.Security.Utility;
 
 [Route("api/auth")]
 [ApiController]
@@ -23,28 +25,30 @@ public class AuthController : ControllerBase
     public IActionResult Login([FromBody] LoginRequest request)
     {
         var user = _context.Users.FirstOrDefault(u => u.Email == request.Email);
-        if (user == null || !BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash)) // Fully qualify the BCrypt.Verify method
-        {
-            return Unauthorized("Invalid credentials");
-        }
+
+        var secret = _config["JwtSettings:Secret"];
+        if (string.IsNullOrEmpty(secret) || secret.Length < 32)
+            throw new Exception("JWT Secret is missing or too short");
+
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret));
 
         var tokenHandler = new JwtSecurityTokenHandler();
-        var key = Encoding.UTF8.GetBytes("YourSuperSecretKeyHere");
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(new[]
             {
-               new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-               new Claim(ClaimTypes.Email, user.Email),
-               new Claim(ClaimTypes.Role, user.Role)
-           }),
+            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+            new Claim(ClaimTypes.Email, user.Email),
+        }),
             Expires = DateTime.UtcNow.AddHours(2),
-            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            SigningCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature)
         };
 
         var token = tokenHandler.CreateToken(tokenDescriptor);
-        return Ok(new { token = tokenHandler.WriteToken(token) });
-    }
+
+        return Ok(new { token = new JwtSecurityTokenHandler().WriteToken(token) });
+}
+
 
     [HttpPost("register")]
     public IActionResult Register([FromBody] RegisterRequest request)
@@ -58,7 +62,7 @@ public class AuthController : ControllerBase
         {
             Email = request.Email,
             PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.Password),
-            Role = request.Role ?? "Customer"
+       
         };
 
         _context.Users.Add(user);
@@ -78,5 +82,4 @@ public class RegisterRequest
 {
     public string Email { get; set; }
     public string Password { get; set; }
-    public string Role { get; set; }
 }

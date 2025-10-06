@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace SneakerStoreAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250623104801_initialized-shoes")]
+    partial class initializedshoes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -130,98 +133,90 @@ namespace SneakerStoreAPI.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 13,
+                            Id = 1,
                             Brand = "Jordan",
-                            ImageUrl = "https://cdn.flightclub.com/TEMPLATE/011502/1.jpg?w=1920",
-                            Name = "Retro Cement 3",
-                            Price = 300m
-                        },
-                        new
-                        {
-                            Id = 14,
-                            Brand = "Jordan",
-                            ImageUrl = "https://cdn.flightclub.com/TEMPLATE/307016/1.jpg?w=1920",
+                            ImageUrl = "https://cdn.flightclub.com/750/TEMPLATE/805078/1.jpg",
                             Name = "Air Jordan 1",
-                            Price = 300m
+                            Price = 150m
                         },
                         new
                         {
-                            Id = 15,
+                            Id = 2,
                             Brand = "Nike",
-                            ImageUrl = "https://cdn.flightclub.com/TEMPLATE/253215/1.jpg?w=1920",
+                            ImageUrl = "https://cdn.flightclub.com/750/TEMPLATE/251302/1.jpg",
                             Name = "Nike Dunk Low",
                             Price = 120m
                         },
                         new
                         {
-                            Id = 16,
+                            Id = 3,
                             Brand = "Adidas",
-                            ImageUrl = "https://cdn.flightclub.com/TEMPLATE/368573/1.jpg?w=1920",
+                            ImageUrl = "https://cdn.flightclub.com/750/TEMPLATE/803758/1.jpg",
                             Name = "Yeezy Boost 350",
                             Price = 200m
                         },
                         new
                         {
-                            Id = 17,
+                            Id = 4,
                             Brand = "New Balance",
-                            ImageUrl = "https://cdn.flightclub.com/TEMPLATE/371711/1.jpg?w=1920",
+                            ImageUrl = "https://cdn.flightclub.com/750/TEMPLATE/804727/1.jpg",
                             Name = "New Balance 550",
                             Price = 110m
                         },
                         new
                         {
-                            Id = 18,
+                            Id = 5,
                             Brand = "Adidas",
-                            ImageUrl = "https://cdn.flightclub.com/TEMPLATE/460574/1.jpg?w=1920",
+                            ImageUrl = "https://cdn.flightclub.com/750/TEMPLATE/265818/1.jpg",
                             Name = "Adidas Samba OG",
                             Price = 90m
                         },
                         new
                         {
-                            Id = 19,
+                            Id = 7,
                             Brand = "Puma",
-                            ImageUrl = "https://cdn.flightclub.com/TEMPLATE/397161/1.jpg?w=1920",
+                            ImageUrl = "https://cdn.flightclub.com/750/TEMPLATE/804728/1.jpg",
                             Name = "Puma RS-X",
                             Price = 100m
                         },
                         new
                         {
-                            Id = 20,
+                            Id = 8,
                             Brand = "Converse",
-                            ImageUrl = "https://cdn.flightclub.com/TEMPLATE/301688/1.jpg?w=1920",
+                            ImageUrl = "https://cdn.flightclub.com/750/TEMPLATE/804729/1.jpg",
                             Name = "Converse Chuck 70",
                             Price = 75m
                         },
                         new
                         {
-                            Id = 21,
+                            Id = 9,
                             Brand = "Reebok",
-                            ImageUrl = "https://cdn.flightclub.com/TEMPLATE/363222/1.jpg?w=1920",
+                            ImageUrl = "https://cdn.flightclub.com/750/TEMPLATE/804730/1.jpg",
                             Name = "Reebok Club C 85",
                             Price = 85m
                         },
                         new
                         {
-                            Id = 22,
+                            Id = 10,
                             Brand = "Asics",
-                            ImageUrl = "https://cdn.flightclub.com/TEMPLATE/389891/1.jpg?w=1920",
+                            ImageUrl = "https://cdn.flightclub.com/750/TEMPLATE/804731/1.jpg",
                             Name = "Asics Gel-Lyte III",
                             Price = 95m
                         },
                         new
                         {
-                            Id = 23,
+                            Id = 11,
                             Brand = "Vans",
-                            ImageUrl = "https://cdn.flightclub.com/TEMPLATE/350502/1.jpg?w=1920",
+                            ImageUrl = "https://cdn.flightclub.com/750/TEMPLATE/804732/1.jpg",
                             Name = "Vans Old Skool",
                             Price = 70m
                         },
                         new
                         {
-                            Id = 24,
-                            Brand = "New Balance",
-                            ImageUrl = "https://cdn.flightclub.com/TEMPLATE/350162/1.jpg?w=1920",
-                            Name = "New Balance 2002R",
+                            Id = 12,
+                            Brand = "On",
+                            ImageUrl = "https://cdn.flightclub.com/750/TEMPLATE/804733/1.jpg",
+                            Name = "On Cloudnova",
                             Price = 160m
                         });
                 });

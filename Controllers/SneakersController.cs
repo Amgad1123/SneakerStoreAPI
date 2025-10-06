@@ -1,29 +1,32 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SneakerStoreAPI.Models;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using System.Web.Http;
+using Microsoft.AspNetCore.Authorization;
 
 namespace SneakerStoreAPI.Controllers
 {
+        
     [Route("api/[controller]")]
     [ApiController]
-    public class SneakerController : Controller
+    public class SneakersController : ControllerBase
     {
         private readonly AppDbContext _context;
-        public SneakerController(AppDbContext context)
+
+        public SneakersController(AppDbContext context)
         {
             _context = context;
         }
 
-        [Microsoft.AspNetCore.Mvc.HttpGet]
+        [HttpGet]
         public async Task<ActionResult<IEnumerable<Sneaker>>> GetSneakers()
         {
             return await _context.Sneakers.ToListAsync();
         }
 
-        [Microsoft.AspNetCore.Mvc.HttpGet("{id}")]
-        public async Task<ActionResult<IEnumerable<Sneaker>>> GetSneaker(int id)
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Sneaker>> GetSneaker(int id)
         {
             var sneaker = await _context.Sneakers.FindAsync(id);
             if (sneaker == null)
@@ -33,23 +36,25 @@ namespace SneakerStoreAPI.Controllers
             return Ok(sneaker);
         }
 
-        [Authorize(Roles = "Admin")]
-        [System.Web.Http.HttpPost]
-        public async Task<ActionResult<IEnumerable<Sneaker>>> AddSneaker(Sneaker sneaker)
+        
+        [HttpPost]
+        public async Task<ActionResult<Sneaker>> AddSneaker([FromBody] Sneaker sneaker)
         {
             _context.Sneakers.Add(sneaker);
             await _context.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetSneaker), new { id = sneaker.Id }, sneaker);
+            return Ok(sneaker);
         }
 
-        [Microsoft.AspNetCore.Mvc.HttpPut("{id}")]
-        public async Task<IActionResult> UpdateSneaker(int id, Sneaker sneaker)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateSneaker(int id, [FromBody] Sneaker sneaker)
         {
             if (id != sneaker.Id)
             {
                 return BadRequest();
             }
+
             _context.Entry(sneaker).State = EntityState.Modified;
+
             try
             {
                 await _context.SaveChangesAsync();
@@ -58,20 +63,23 @@ namespace SneakerStoreAPI.Controllers
             {
                 return NotFound();
             }
+
             return NoContent();
         }
 
-        [Microsoft.AspNetCore.Mvc.HttpDelete("{id}")]
-        public async Task<ActionResult<IEnumerable<Sneaker>>> DeleteSneaker(int id)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteSneaker(int id)
         {
             var sneaker = await _context.Sneakers.FindAsync(id);
             if (sneaker == null)
             {
                 return NotFound();
             }
+
             _context.Sneakers.Remove(sneaker);
             await _context.SaveChangesAsync();
             return Ok(sneaker);
         }
     }
 }
+

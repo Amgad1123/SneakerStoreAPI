@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace SneakerStoreAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250623224953_ReseedSneakers")]
+    partial class ReseedSneakers
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -130,15 +133,7 @@ namespace SneakerStoreAPI.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 13,
-                            Brand = "Jordan",
-                            ImageUrl = "https://cdn.flightclub.com/TEMPLATE/011502/1.jpg?w=1920",
-                            Name = "Retro Cement 3",
-                            Price = 300m
-                        },
-                        new
-                        {
-                            Id = 14,
+                            Id = 1,
                             Brand = "Jordan",
                             ImageUrl = "https://cdn.flightclub.com/TEMPLATE/307016/1.jpg?w=1920",
                             Name = "Air Jordan 1",
@@ -146,7 +141,7 @@ namespace SneakerStoreAPI.Migrations
                         },
                         new
                         {
-                            Id = 15,
+                            Id = 2,
                             Brand = "Nike",
                             ImageUrl = "https://cdn.flightclub.com/TEMPLATE/253215/1.jpg?w=1920",
                             Name = "Nike Dunk Low",
@@ -154,7 +149,7 @@ namespace SneakerStoreAPI.Migrations
                         },
                         new
                         {
-                            Id = 16,
+                            Id = 3,
                             Brand = "Adidas",
                             ImageUrl = "https://cdn.flightclub.com/TEMPLATE/368573/1.jpg?w=1920",
                             Name = "Yeezy Boost 350",
@@ -162,7 +157,7 @@ namespace SneakerStoreAPI.Migrations
                         },
                         new
                         {
-                            Id = 17,
+                            Id = 4,
                             Brand = "New Balance",
                             ImageUrl = "https://cdn.flightclub.com/TEMPLATE/371711/1.jpg?w=1920",
                             Name = "New Balance 550",
@@ -170,7 +165,7 @@ namespace SneakerStoreAPI.Migrations
                         },
                         new
                         {
-                            Id = 18,
+                            Id = 5,
                             Brand = "Adidas",
                             ImageUrl = "https://cdn.flightclub.com/TEMPLATE/460574/1.jpg?w=1920",
                             Name = "Adidas Samba OG",
@@ -178,7 +173,7 @@ namespace SneakerStoreAPI.Migrations
                         },
                         new
                         {
-                            Id = 19,
+                            Id = 7,
                             Brand = "Puma",
                             ImageUrl = "https://cdn.flightclub.com/TEMPLATE/397161/1.jpg?w=1920",
                             Name = "Puma RS-X",
@@ -186,7 +181,7 @@ namespace SneakerStoreAPI.Migrations
                         },
                         new
                         {
-                            Id = 20,
+                            Id = 8,
                             Brand = "Converse",
                             ImageUrl = "https://cdn.flightclub.com/TEMPLATE/301688/1.jpg?w=1920",
                             Name = "Converse Chuck 70",
@@ -194,7 +189,7 @@ namespace SneakerStoreAPI.Migrations
                         },
                         new
                         {
-                            Id = 21,
+                            Id = 9,
                             Brand = "Reebok",
                             ImageUrl = "https://cdn.flightclub.com/TEMPLATE/363222/1.jpg?w=1920",
                             Name = "Reebok Club C 85",
@@ -202,7 +197,7 @@ namespace SneakerStoreAPI.Migrations
                         },
                         new
                         {
-                            Id = 22,
+                            Id = 10,
                             Brand = "Asics",
                             ImageUrl = "https://cdn.flightclub.com/TEMPLATE/389891/1.jpg?w=1920",
                             Name = "Asics Gel-Lyte III",
@@ -210,7 +205,7 @@ namespace SneakerStoreAPI.Migrations
                         },
                         new
                         {
-                            Id = 23,
+                            Id = 11,
                             Brand = "Vans",
                             ImageUrl = "https://cdn.flightclub.com/TEMPLATE/350502/1.jpg?w=1920",
                             Name = "Vans Old Skool",
@@ -218,11 +213,19 @@ namespace SneakerStoreAPI.Migrations
                         },
                         new
                         {
-                            Id = 24,
+                            Id = 12,
                             Brand = "New Balance",
                             ImageUrl = "https://cdn.flightclub.com/TEMPLATE/350162/1.jpg?w=1920",
                             Name = "New Balance 2002R",
                             Price = 160m
+                        },
+                        new
+                        {
+                            Id = 13,
+                            Brand = "Jordan",
+                            ImageUrl = "https://cdn.flightclub.com/TEMPLATE/011502/1.jpg?w=1920",
+                            Name = "Retro Cement 3",
+                            Price = 300m
                         });
                 });
 
