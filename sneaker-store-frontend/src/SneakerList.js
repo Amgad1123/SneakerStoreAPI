@@ -5,7 +5,7 @@ const SneakerList = ({ searchTerm, selectedBrand, maxPrice, onAddToCart}) => {
     const [sneakers, setSneakers] = useState([]);
 
     useEffect(() => {
-        fetch("https://localhost:7038/api/sneakers")
+        fetch("/api/sneakers")
             .then((res) => res.json())
             .then((data) => setSneakers(data))
             .catch((err) => console.error("Error fetching sneakers:", err));

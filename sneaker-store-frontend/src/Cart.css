@@ -1,7 +1,7 @@
 ﻿.cart {
     position: fixed;
     right: 1rem;
-    top: 4rem;
+    top: 4.2rem;
     width: 300px;
     background: #fff;
     border: 1px solid #ddd;
@@ -35,3 +35,11 @@
     object-fit: cover;
     border-radius: 6px;
 }
+
+.cart increment, 
+.cart decrement{
+    padding: 8px;
+}
+
+
+
