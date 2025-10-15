@@ -1,9 +1,9 @@
 ﻿import React from "react";
 import "./Navbar.css";
-
-const Navbar = ({cartCount,onCartClick }) => (
-    <div className="navbar">
-        <h1>Sneaker Vault</h1>
+import { Link } from 'react-router-dom';
+const Navbar = ({ cartCount, onCartClick}) => (
+    <div className="navbar">    
+        <Link to="/" className="logo-link">Sneaker Vault</Link>
         <div className="nav-buttons">
             <button>Sign In</button>
             <button>Register</button>

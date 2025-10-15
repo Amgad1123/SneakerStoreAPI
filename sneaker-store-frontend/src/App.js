@@ -13,6 +13,9 @@ function App() {
     const [maxPrice, setMaxPrice] = useState("");
     const [cartItems, setCartItems] = useState([]);
     const [total, setTotal] = useState(0);
+    const [cartOpen, setCartOpen] = useState(false);
+    const [openFullCart, setOpenFullCart] = useState(false);
+    const [cartCount, setCartCount] = useState(0);
     const handleAddToCart = (sneaker) => {
         const existingIndex = cartItems.findIndex(item => item.id === sneaker.id);
         let totalAmount = total;
@@ -21,6 +24,7 @@ function App() {
             const updatedItems = [...cartItems];
             updatedItems[existingIndex].count += 1;
             setCartItems(updatedItems)
+            setTotal(total + updatedItems[existingIndex].price);
         } else {
             // New sneaker, add with count 1
             const updatedItems = [...cartItems, { ...sneaker, count: 1 }];
@@ -30,13 +34,12 @@ function App() {
         }
 
     };
-    const [cartOpen, setCartOpen] = useState(false);
-    const [openFullCart, setOpenFullCart] = useState(false);
+    
     return (
         <Router>
-            <Navbar total={total} setTotal={setTotal} cartCount={cartItems.length} onCartClick={() => setCartOpen(!cartOpen)} on/>
-         
-            {cartOpen && <Cart total={total} setTotal={setTotal} cartItems={cartItems} setCartItems={setCartItems} onCartClick={()=> setOpenFullCart(!openFullCart) } />}
+            <Navbar total={total} setTotal={setTotal} cartCount={cartCount} onCartClick={() => setCartOpen(!cartOpen)} on />
+
+            {cartOpen && <Cart total={total} setTotal={setTotal} onCartClick={() => { setOpenFullCart(true) }} cartCount={cartCount} setCartCount={setCartCount} cartItems={cartItems} setCartItems={setCartItems} openFullCart={openFullCart} setOpenFullCart={setOpenFullCart} setCartOpen={setCartOpen} />}
             <Routes>
            
                 <Route path="/" element={<>
@@ -50,13 +53,15 @@ function App() {
                         selectedBrand={selectedBrand}
                         maxPrice={maxPrice}
                         onAddToCart={handleAddToCart}
+                        cartCount={cartCount}
+                        setCartCount={setCartCount }
                     />
                 </>
                 }
                 />
                 <Route path="/Cart" element={
                     <FullCart
-                    total={total} setTotal={setTotal} cartItems={cartItems} setCartItems={setCartItems}
+                        total={total} setTotal={setTotal} cartItems={cartItems} setCartItems={setCartItems} setCartCount={setCartCount} cartCount={cartCount}
                 />}></Route>
 
             </Routes>

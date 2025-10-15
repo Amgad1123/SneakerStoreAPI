@@ -18,3 +18,15 @@
     padding: 0.5rem;
     cursor: pointer;
 }
+
+.logo-link {
+    text-decoration: none;
+    color: #fff;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+    .logo-link:hover {
+        transform: translateY(-3px);
+        color: #ff6347;
+    }

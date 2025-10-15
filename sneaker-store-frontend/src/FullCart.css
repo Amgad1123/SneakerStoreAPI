@@ -1,0 +1,131 @@
+﻿.shoppingCart {
+    display: flex;
+    width: 90%;
+    justify-content: space-between;
+}
+.fullCart {
+    display: flex;
+    flex-direction: column;
+    margin-left: 200px;
+}
+
+.cartHeader {
+    margin-left: 200px;
+    margin-bottom: 10px;
+    font-size: 30px;
+    font-weight: 300;
+}
+.fullCart h2 {
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+}
+
+.fullCart ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    margin-bottom: 10px;
+}
+
+.fullCart li {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-radius: 8px;
+    margin-top: 5px;
+    box-shadow: 0 0 0 1px;
+    height: 110px;
+    min-width: 340px;
+}
+
+.fullCart li img {
+    width: 100px;
+    height: 90px;
+    object-fit: cover;
+    border-radius: 6px;
+}
+
+.checkout-link {
+    text-decoration: none;
+    background-color: lightgrey;
+    padding: 8px;
+    border: 1px solid black;
+    width: 80px;
+    border-radius: 6px;
+    display: flex;
+    justify-self: center;
+    color: black;
+    font-weight: 400;
+    align-content: center;
+}
+
+.fullCart increment,
+.fullCart decrement {
+    padding: 8px;
+}
+
+
+.checkoutDiv {
+    display: flex;
+    border-radius: 8px;
+    border: 1px solid black;
+    flex-direction: column;
+    width: 330px;
+    margin-right: 30px;
+    padding: 15px;
+    box-shadow: 0 0 0 1px rgba(0,0,0,0.4);
+}
+
+.cart-count {
+    margin-top: -12px;
+}
+.cart-info {
+    display: flex;
+    flex-direction: column;
+    align-items:center;
+    justify-content:normal;
+    margin-left: 10px;
+}
+.shipping-dropdown {
+    border-radius: 6px;
+    width: 250px;
+    height: 30px;
+}
+.shipping-method {
+    display:flex;
+    flex-direction: column;
+}
+
+item-name {
+    margin-bottom: -20px;
+}
+.amount-wrapper {
+    display:flex;
+    align-items: center;
+    margin-top: -20px;
+    gap:5px;
+}
+.description-wrapper {
+    display:flex;
+    flex-direction: column;
+}
+.trash {
+    margin-left: 40px;
+}
+
+.shipping {
+    margin-top: -20px;
+} 
+
+.total {
+    margin-top: -15px;
+}
+.total-p {
+    font-size: 20px;
+}
+.sub-total, .shipping, .total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+

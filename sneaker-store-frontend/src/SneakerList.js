@@ -1,7 +1,7 @@
 ﻿import React, { useEffect, useState } from "react";
 import "./SneakerList.css";
 
-const SneakerList = ({ searchTerm, selectedBrand, maxPrice, onAddToCart}) => {
+const SneakerList = ({ searchTerm, selectedBrand, maxPrice, onAddToCart, setCartCount, cartCount }) => {
     const [sneakers, setSneakers] = useState([]);
 
     useEffect(() => {
@@ -11,7 +11,7 @@ const SneakerList = ({ searchTerm, selectedBrand, maxPrice, onAddToCart}) => {
             .catch((err) => console.error("Error fetching sneakers:", err));
     }, []);
 
-    // ✅ Step 1: Filter sneakers
+    //  Step 1: Filter sneakers
     const filteredSneakers = sneakers.filter((sneaker) => {
         const matchesSearch = sneaker.name.toLowerCase().includes(searchTerm.toLowerCase());
         const matchesBrand =
@@ -22,7 +22,7 @@ const SneakerList = ({ searchTerm, selectedBrand, maxPrice, onAddToCart}) => {
         return matchesSearch && matchesBrand && matchesPrice;
     });
 
-    // ✅ Step 2: Pad with placeholders
+    //  Step 2: Pad with placeholders
     const placeholdersNeeded = Math.max(0, 12 - filteredSneakers.length);
     const paddedSneakers = [...filteredSneakers];
 
@@ -42,7 +42,10 @@ const SneakerList = ({ searchTerm, selectedBrand, maxPrice, onAddToCart}) => {
                             <img src={sneaker.imageUrl} alt={sneaker.name} />
                             <h3>{sneaker.name}</h3>
                             <p>${sneaker.price}</p>
-                            <button onClick={() => onAddToCart(sneaker) }>Add to Cart</button>
+                            <button onClick={() => {
+                                onAddToCart(sneaker)
+                                setCartCount(cartCount + 1);
+                            }}>Add to Cart</button>
                         </>
                     ) : null}
                 </div>

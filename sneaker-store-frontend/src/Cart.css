@@ -2,13 +2,14 @@
     position: fixed;
     right: 1rem;
     top: 4.2rem;
-    width: 300px;
+    width: 250px;
     background: #fff;
     border: 1px solid #ddd;
     padding: 1rem;
     z-index: 2000;
     box-shadow: 0 0 10px rgba(0,0,0,0.2);
     border-radius: 8px;
+    overflow-y: auto;
 }
 
 .cart h2 {
@@ -36,9 +37,42 @@
     border-radius: 6px;
 }
 
+.cartButton {
+    text-decoration: none;
+    background-color: lightgrey;
+    padding: 8px;
+    border: 1px solid black;
+    width: 75px;
+    border-radius: 6px;
+    display: flex;
+    color: black;
+    font-weight: 400;
+    align-content: center;
+}
 .cart increment, 
 .cart decrement{
     padding: 8px;
+}
+
+.item-name {
+    margin-bottom: -20px;
+}
+
+.amount-wrapper {
+    display: flex;
+    align-items: center;
+    margin-top: -20px;
+    gap: 5px;
+}
+
+.description-wrapper {
+    display: flex;
+    flex-direction: column;
+    margin-left: -20px;
+}
+
+.trash {
+    margin-left: 40px;
 }
 
 
