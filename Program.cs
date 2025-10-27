@@ -35,7 +35,6 @@ namespace SneakerStoreAPI
 
             var symmetricKey = new SymmetricSecurityKey(keyBytes);
 
-           
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
@@ -50,20 +49,31 @@ namespace SneakerStoreAPI
                     };
                 });
 
-
-            
             builder.Services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
             );
 
-           
-            builder.Services.AddControllers();
+            builder.Services.AddControllersWithViews(); // 🔹 instead of AddControllers()
 
-            // 🔹 Swagger Setup with JWT Authentication
+            // 🔹 Allow your React frontend
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowFrontend",
+                    policy => policy.WithOrigins("http://localhost:3000")
+                                    .AllowAnyMethod()
+                                    .AllowAnyHeader());
+            });
+
+            // 🔹 Add SPA static files (for production)
+            builder.Services.AddSpaStaticFiles(configuration =>
+            {
+                configuration.RootPath = "sneaker-store-frontend/build";
+            });
+
+            // 🔹 Swagger setup
             builder.Services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Sneaker Store API", Version = "v1" });
-
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     Description = "Enter JWT like: Bearer {your token}",
@@ -72,7 +82,6 @@ namespace SneakerStoreAPI
                     Type = SecuritySchemeType.Http,
                     Scheme = "Bearer"
                 });
-
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {
                     {
@@ -88,13 +97,7 @@ namespace SneakerStoreAPI
                     }
                 });
             });
-            builder.Services.AddCors(options =>
-            {
-                options.AddPolicy("AllowFrontend",
-                    policy => policy.WithOrigins("http://localhost:3000") // ✅ Allow React frontend
-                                    .AllowAnyMethod()
-                                    .AllowAnyHeader());
-            });
+
             var app = builder.Build();
 
             if (app.Environment.IsDevelopment())
@@ -108,9 +111,9 @@ namespace SneakerStoreAPI
             app.UseAuthentication();
             app.UseAuthorization();
 
-          
-
             app.MapControllers();
+
+
             app.Run();
         }
     }

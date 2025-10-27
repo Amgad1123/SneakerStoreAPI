@@ -5,7 +5,8 @@ import Sidebar from "./Sidebar";
 import SneakerList from "./SneakerList";
 import Cart from "./Cart";
 import FullCart from "./FullCart";
-
+import Register from "./Register";
+import Login from "./Login";
 
 function App() {
     const [searchTerm, setSearchTerm] = useState("");
@@ -64,6 +65,15 @@ function App() {
                         total={total} setTotal={setTotal} cartItems={cartItems} setCartItems={setCartItems} setCartCount={setCartCount} cartCount={cartCount}
                 />}></Route>
 
+                <Route path="/Register" element={
+                    <Register
+                       
+                    />}></Route>
+
+                <Route path="/Login" element={
+                    <Login
+
+                    />}></Route>
             </Routes>
            
 

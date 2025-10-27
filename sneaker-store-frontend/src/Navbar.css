@@ -17,6 +17,17 @@
     border: 1px solid #fff;
     padding: 0.5rem;
     cursor: pointer;
+    text-decoration: none;
+}
+
+.register-link, .login-link {
+    margin-left: 0.5rem;
+    background: transparent;
+    color: #fff;
+    border: 1px solid #fff;
+    padding: 0.37rem;
+    cursor: pointer;
+    text-decoration: none;
 }
 
 .logo-link {

@@ -5,10 +5,10 @@ const Navbar = ({ cartCount, onCartClick}) => (
     <div className="navbar">    
         <Link to="/" className="logo-link">Sneaker Vault</Link>
         <div className="nav-buttons">
-            <button>Sign In</button>
-            <button>Register</button>
+            <Link to="/Login" className="login-link">Login</Link>
+            <Link to="/Register" className="register-link">Register</Link>
             <button onClick={onCartClick}>🛒 Cart ({cartCount})</button>
-        
+      
         </div>
     </div>
 );

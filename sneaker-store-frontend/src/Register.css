@@ -1,0 +1,42 @@
+﻿.signup-form, .signin-form {
+    display: flex;
+    justify-self: center;
+    flex-direction: column;
+    border-radius: 8px;
+    border: 1px solid black;
+    box-shadow: 0 0 0 1px rgba(0.3);
+    margin-top: 10%;
+    padding: 20px;
+    min-width: 300px;
+    min-height: 300px;
+    margin-left: 20px;
+}
+
+.underLine {
+    border-top: 1px solid black;
+}
+
+label {
+    font-weight: 400;
+}
+.signIn {
+    text-decoration: none;
+    border: 1px solid black;
+    padding: 12px;
+    background-color: black;
+    color: white;
+    border-radius: 8px;
+
+}
+
+input {
+    width: 250px;
+    height: 30px;
+    border-radius: 6px;
+}
+
+.form-group {
+    display:flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+}
