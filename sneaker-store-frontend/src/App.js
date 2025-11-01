@@ -7,7 +7,6 @@ import Cart from "./Cart";
 import FullCart from "./FullCart";
 import Register from "./Register";
 import Login from "./Login";
-//import { GoogleOAuthProvider } from '@react-oauth/google'
 
 function App() {
     //const clientId = "Your-Google-OAuth-Client-ID"; 

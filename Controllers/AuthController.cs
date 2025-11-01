@@ -64,7 +64,59 @@ public class AuthController : ControllerBase
         return Ok(new { token = new JwtSecurityTokenHandler().WriteToken(token) });
     }
 
+    [HttpPost("google")]
+    public async Task<IActionResult> GoogleLogin([FromBody] GoogleLoginRequest request)
+    {
+        var client = new HttpClient();
+        var googleResponse = await client.GetStringAsync(
+            $"https://www.googleapis.com/oauth2/v3/tokeninfo?id_token={request.Token}"
+        );
 
+        var googleData = System.Text.Json.JsonDocument.Parse(googleResponse);
+        var email = googleData.RootElement.GetProperty("email").GetString();
+
+        if (string.IsNullOrEmpty(email))
+            return BadRequest(new { success = false, message = "Invalid Google token" });
+
+        // Check if user exists or create a new one
+        var user = _context.Users.FirstOrDefault(u => u.Email == email);
+        if (user == null)
+        {
+            user = new User
+            {
+                Email = email,
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword(Guid.NewGuid().ToString()) // random pw
+            };
+            _context.Users.Add(user);
+            _context.SaveChanges();
+        }
+
+        // Generate app JWT (same way as your normal login)
+        var secret = _config["JwtSettings:Secret"];
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret));
+
+        var tokenHandler = new JwtSecurityTokenHandler();
+        var tokenDescriptor = new SecurityTokenDescriptor
+        {
+            Subject = new ClaimsIdentity(new[]
+            {
+            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+            new Claim(ClaimTypes.Email, user.Email)
+        }),
+            Expires = DateTime.UtcNow.AddHours(2),
+            SigningCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature)
+        };
+
+        var token = tokenHandler.CreateToken(tokenDescriptor);
+        var jwt = tokenHandler.WriteToken(token);
+
+        return Ok(new { success = true, jwt });
+    }
+
+    public class GoogleLoginRequest
+    {
+        public string Token { get; set; }
+    }
 
     [HttpPost("register")]
     public IActionResult Register([FromBody] RegisterRequest request)

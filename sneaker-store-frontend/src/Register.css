@@ -44,3 +44,12 @@ input {
 .errors {
     color:red;
 }
+
+.google-login {
+    display: flex;
+    justify-content: center;
+}
+
+.google-login {
+    margin-bottom: 12px;
+}

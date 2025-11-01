@@ -1,6 +1,6 @@
 ﻿import { React, useState } from "react";
 import { GoogleLogin } from '@react-oauth/google';
-import jwtDecode from 'jwt-decode';
+import { jwtDecode }  from 'jwt-decode';
 import { Link } from 'react-router';
 import { loginUser } from "./api/auth";
 import { useNavigate } from "react-router-dom";
@@ -16,25 +16,54 @@ export default function Login() {
         try {
             const data = await loginUser(email, password);
             localStorage.setItem("token", data.token); // ✅ Store JWT
+            logout();
+            navigate("/")
             alert("Login successful!");
-            //login register and logout frontend display 
-            const loginButton = document.querySelector(".login-link");
-            const nav = document.querySelector(".nav-buttons");
-            loginButton.style.display = "none";
-            const registerButton = document.querySelector(".register-link");
-            registerButton.style.display = "none";
-            const logoutButton = document.createElement("Button");
-            logoutButton.textContent = "Logout";
-            logoutButton.setAttribute("style", "background: transparent; color: #fff; border: 1px solid #fff; padding: 0.5rem; cursor: pointer; text - decoration: none; ")
-            nav.append(logoutButton);
-            logoutButton.addEventListener("click", () => {
-                registerButton.style.display = "inline-block";
-                loginButton.style.display = "inline-block";
-                logoutButton.style.display = "none";
-            })
-           navigate("/")
         } catch (err) {
             setMessage(err.message);
+        }
+    };
+
+     function logout() {
+         //login register and logout frontend display 
+         const loginButton = document.querySelector(".login-link");
+         const nav = document.querySelector(".nav-buttons");
+         loginButton.style.display = "none";
+         const registerButton = document.querySelector(".register-link");
+         registerButton.style.display = "none";
+         const logoutButton = document.createElement("Button");
+         logoutButton.textContent = "Logout";
+         logoutButton.setAttribute("style", "background: transparent; color: #fff; border: 1px solid #fff; padding: 0.5rem; cursor: pointer; text - decoration: none; ")
+         nav.append(logoutButton);
+         logoutButton.addEventListener("click", () => {
+             registerButton.style.display = "inline-block";
+             loginButton.style.display = "inline-block";
+             logoutButton.style.display = "none";
+         });
+    }
+    const handleGoogleSuccess = async (credentialResponse) => {
+        try {
+            const token = credentialResponse.credential;
+            const decoded = jwtDecode(token);
+            console.log("Google decoded user:", decoded);
+
+            const res = await fetch("http://localhost:5158/api/auth/google", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ token }),
+            });
+
+            const data = await res.json();
+            if (data.success) {
+                localStorage.setItem("token", data.jwt); 
+                logout();
+                navigate("/");
+                alert("Login successful!");
+            } else {
+                setMessage(data.message || "Google login failed");
+            }
+        } catch (err) {
+            setMessage("Google login error");
         }
     };
     return (
@@ -50,8 +79,17 @@ export default function Login() {
                 <div className="form-group">
                     <label htmlFor="password">Password</label>
                     <input type="password" id="password" name="password" onChange={(e) => setPassword(e.target.value)} required />
-                    <Link to="/Register">New here? Click to register</Link>
+                    <Link to="/Register" className = "registerLink">New here? Click to register</Link>
                 </div>
+                <div className="google-login">
+                    <GoogleLogin
+                        onSuccess={handleGoogleSuccess}
+                        onError={() => {
+                            setMessage("Google Login Failed");
+                        }}
+                    />
+                </div>
+
                 <button type="submit" className = "signIn">Login</button>
             </form>
         </div>
