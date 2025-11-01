@@ -6,7 +6,6 @@ import "./Register.css";
 export default function Register() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [message, setMessage] = useState("");
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
@@ -16,14 +15,20 @@ export default function Register() {
             alert(result);
             navigate("/Login");
         } catch (err) {
-            setMessage(err.message);
+            const container = document.getElementById("errorList");
+            // Get the error(s) and map it/them in a list 
+            container.innerHTML = err
+                .map(e => `<li style="color:red;">${e}</li>`)
+                .join("");
         }
+       
     };
+
     return (
         <div className="signup-form">
             <h2 className="reg-header">Register</h2>
             <div className="underLine"></div>
-            <p className ="errors"></p>
+            <ul id="errorList"></ul>
             <form onSubmit={handleSubmit}>
                 <div className="form-group">  
                     <label htmlFor="email">Email</label>
@@ -32,10 +37,10 @@ export default function Register() {
                 <div className="form-group">
                     <label htmlFor="password">Password</label>
                     <input type="password" id="password" name="password" onChange={(e) => setPassword(e.target.value)} required />
-                </div>  
+                    <Link to="/Login">Already a member? Click to sign in</Link>
+                </div>           
                 <button type="submit" className="signIn">Register</button>
             </form>
-            {message && <p>{message}</p>}
         </div>
     )
 }

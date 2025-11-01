@@ -1,4 +1,6 @@
 ﻿import { React, useState } from "react";
+import { GoogleLogin } from '@react-oauth/google';
+import jwtDecode from 'jwt-decode';
 import { Link } from 'react-router';
 import { loginUser } from "./api/auth";
 import { useNavigate } from "react-router-dom";
@@ -15,6 +17,7 @@ export default function Login() {
             const data = await loginUser(email, password);
             localStorage.setItem("token", data.token); // ✅ Store JWT
             alert("Login successful!");
+            //login register and logout frontend display 
             const loginButton = document.querySelector(".login-link");
             const nav = document.querySelector(".nav-buttons");
             loginButton.style.display = "none";
@@ -38,7 +41,7 @@ export default function Login() {
         <div className="signin-form">
             <h2 className="signIn-header">Login</h2>
             <div className="underLine"></div>
-            <p className="errors"></p>
+            {message && <p className="errors">{message}</p>}
             <form onSubmit={handleSubmit}>
                 <div className="form-group">
                     <label htmlFor="email">Email</label>
@@ -47,10 +50,10 @@ export default function Login() {
                 <div className="form-group">
                     <label htmlFor="password">Password</label>
                     <input type="password" id="password" name="password" onChange={(e) => setPassword(e.target.value)} required />
+                    <Link to="/Register">New here? Click to register</Link>
                 </div>
                 <button type="submit" className = "signIn">Login</button>
             </form>
-            {message && <p>{message}</p>}
         </div>
     )
 }

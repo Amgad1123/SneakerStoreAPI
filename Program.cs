@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -96,6 +97,24 @@ namespace SneakerStoreAPI
                         Array.Empty<string>()
                     }
                 });
+            });
+
+            builder.Services.Configure<ApiBehaviorOptions>(options =>
+            {
+                options.InvalidModelStateResponseFactory = context =>
+                {
+                    var errors = context.ModelState.Values
+                       .SelectMany(v => v.Errors)
+                       .Select(e => e.ErrorMessage)
+                       .ToList();
+
+                    return new BadRequestObjectResult(new
+                    {
+                        success = false,
+                        message = "Validation failed",
+                        errors = errors // send an array to frontend
+                    });
+                };
             });
 
             var app = builder.Build();

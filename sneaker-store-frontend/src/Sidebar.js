@@ -4,7 +4,7 @@ import "./Sidebar.css";
 const Sidebar = ({ onSearchChange, onBrandChange, onPriceChange }) => (
     <div className="sidebar">
         <input
-            class = "searchBar"
+            className = "searchBar"
             type="text"
             placeholder="Search by name"
             onChange={e => onSearchChange(e.target.value)}

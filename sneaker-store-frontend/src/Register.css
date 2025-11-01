@@ -40,3 +40,7 @@ input {
     flex-direction: column;
     margin-bottom: 20px;
 }
+
+.errors {
+    color:red;
+}
