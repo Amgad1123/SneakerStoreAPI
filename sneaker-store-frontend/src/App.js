@@ -75,6 +75,8 @@ function App() {
                     <Login
 
                     />}></Route>
+                <Route path="/success" element={<h2>✅ Payment successful! Thank you for your purchase.</h2>} />
+                <Route path="/cancel" element={<h2>❌ Payment canceled. Try again later.</h2>} />
             </Routes>
            
 
