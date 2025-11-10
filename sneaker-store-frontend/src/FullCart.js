@@ -1,11 +1,25 @@
-﻿import React, { useState } from "react";
+﻿import React, { useState, useEffect } from "react";
 //import { Link } from 'react-router'
 import "./FullCart.css"
 import CheckoutButton from "./Checkout";
-
-export default function FullCart({ cartItems, setCartItems, total, setTotal, cartCount, setCartCount }) {
+import { getCartItems } from "./api/CartService";
+export default function FullCart({total, setTotal, cartCount, setCartCount }) {
     const [shippingPrice, setShippingPrice] = useState(0);
     const [updatedTotal, setUpdatedTotal] = useState(total);
+    const [cartItems, setCartItems] = useState([]);
+
+    useEffect(() => {
+        async function loadCart() {
+            const items = await getCartItems();
+            setCartItems(items);
+            const newTotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+            setTotal(newTotal);
+            setUpdatedTotal(newTotal);
+        }
+        loadCart();
+    }, []);
+
+
     function handleIncrement(index) {
         const items = [...cartItems];
         items[index].count += 1;
@@ -105,7 +119,7 @@ export default function FullCart({ cartItems, setCartItems, total, setTotal, car
                     <div className="total">
                         <p className="total-p">Total</p>
                         <p>${updatedTotal.toFixed(2)}</p>
-                    </div>
+                    </div>n
                     <CheckoutButton cartItems={cartItems} shippingPrice={shippingPrice}>
 
                     </CheckoutButton>

@@ -7,7 +7,7 @@ import Cart from "./Cart";
 import FullCart from "./FullCart";
 import Register from "./Register";
 import Login from "./Login";
-
+import { addToCart, getCartItems } from "./api/CartService";
 function App() {
     //const clientId = "Your-Google-OAuth-Client-ID"; 
     const [searchTerm, setSearchTerm] = useState("");
@@ -18,23 +18,45 @@ function App() {
     const [cartOpen, setCartOpen] = useState(false);
     const [openFullCart, setOpenFullCart] = useState(false);
     const [cartCount, setCartCount] = useState(0);
-    const handleAddToCart = (sneaker) => {
-        const existingIndex = cartItems.findIndex(item => item.id === sneaker.id);
-        let totalAmount = total;
-        if (existingIndex !== -1) {
-            // Sneaker already in cart, increment count
-            const updatedItems = [...cartItems];
-            updatedItems[existingIndex].count += 1;
-            setCartItems(updatedItems)
-            setTotal(total + updatedItems[existingIndex].price);
-        } else {
-            // New sneaker, add with count 1
-            const updatedItems = [...cartItems, { ...sneaker, count: 1 }];
-            setCartItems(updatedItems);
-            totalAmount += sneaker.price;
-            setTotal(totalAmount);
-        }
 
+
+    const handleAddToCart = async (sneaker) => {
+        try {
+            const existingIndex = cartItems.findIndex(item => item.id === sneaker.id);
+
+            if (existingIndex !== -1) {
+                // Already exists → increment count
+                const updatedItem = {
+                    ...cartItems[existingIndex],
+                    quantity: cartItems[existingIndex].quantity + 1,
+                };
+
+                await addToCart(updatedItem);
+            } else {
+                // New sneaker, add with count = 1
+                await addToCart({
+                    name: sneaker.name,
+                    price: sneaker.price,
+                    quantity: 1,
+                    imageUrl: sneaker.imageUrl
+                });
+            }
+
+            // Refresh the cart from backend
+            const updatedCart = await getCartItems();
+            setCartItems(updatedCart);
+
+            console.log(cartItems)
+            // Recalculate total
+            const newTotal = updatedCart.reduce(
+                (sum, item) => sum + item.price * item.quantity,
+                0
+            );
+            setTotal(newTotal);
+
+        } catch (error) {
+            console.error("Error adding to cart:", error);
+        }
     };
     
     return (

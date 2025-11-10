@@ -1,43 +1,61 @@
 ﻿import React from "react";
 import { Link  } from 'react-router';
 import "./Cart.css";
+import { useState, useEffect } from "react";
+import { getCartItems, removeFromCart } from "./api/CartService";
 
-const Cart = ({ cartItems, setCartItems, total, setTotal, setOpenFullCart, setCartOpen, cartCount, setCartCount }) => {
+const Cart = ({ cartItems, setCartItems, total,setTotal, setOpenFullCart, setCartOpen, cartCount, setCartCount }) => {
+   // const [, setCartItems] = useState([]);
+    const [updatedTotal, setUpdatedTotal] = useState(total);
+    useEffect(() => {
+        async function loadCart() {
+            const items = await getCartItems();
+            setCartItems(items);
+            const newTotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+            setTotal(newTotal);
+            setUpdatedTotal(newTotal);
+        }
+        loadCart();
+    }, []);
     function handleIncrement(index) {
-        const items = [...cartItems];
-        items[index].count += 1;
-        setCartItems(items);
-        setTotal(total + items[index].price);
+        const updatedItem = [...cartItems]
+        updatedItem[index].quantity += 1
+        setCartItems(updatedItem);
         setCartCount(cartCount + 1);
+        setTotal(total + updatedItem[index].price);
+        
     }
     function handleCart() {
         setCartOpen(false);
         setOpenFullCart(true);
     }
 
-    function handleTrash(index) {
+    function handleTrash(index, name) {
         const items = [...cartItems];
         const itemPrice = items[index].price;
-        const itemCount = items[index].count;
+        const itemCount = items[index].quantity;
         items.splice(index, 1);
+        removeFromCart(name)
         setCartItems(items);
         setCartCount(cartCount - itemCount);
         setTotal(total - (itemPrice * itemCount));
         //setUpdatedTotal(updatedTotal - (itemPrice * itemCount));
     }
-    function handleDecrement(index) {
+    function handleDecrement(index, name) { 
         const items = [...cartItems];
         const itemPrice = items[index].price;
-
-        if (items[index].count <= 1) {
+        if (items[index].quantity <= 1) {
+            removeFromCart(name)
             setTotal(total - itemPrice);
             items.splice(index, 1);
         } else {
-            items[index].count -= 1;
-            setTotal(total - itemPrice);           
+            items[index].quantity -= 1;
+            setTotal(total - itemPrice);
         }
         setCartCount(cartCount - 1)
         setCartItems(items);
+
+   
     }
 
     return (
@@ -47,7 +65,7 @@ const Cart = ({ cartItems, setCartItems, total, setTotal, setOpenFullCart, setCa
                 <p>Your cart is empty 🛒</p>
             ) : (
                 <div>
-                    {cartItems.map((item, index) => (
+                        {cartItems.map((item, index) => (
                         <ul key={item.id || index}>
                             <li>
                                 <img src={item.imageUrl} alt={item.name} />
@@ -57,10 +75,10 @@ const Cart = ({ cartItems, setCartItems, total, setTotal, setOpenFullCart, setCa
                                         <p>${item.price}</p>
                                     </div>
                                     <div className="amount-wrapper">
-                                        <button className="decrement" onClick={() => handleDecrement(index)}>- </button>
-                                        <p className="amount">{item.count}</p>
+                                        <button className="decrement" onClick={() => handleDecrement(index, item.name)}>- </button>
+                                        <p className="amount">{item.quantity}</p>
                                         <button className="increment" onClick={() => handleIncrement(index)}> +</button>
-                                        <button className="trash" onClick={() => handleTrash(index)}>🗑️</button>
+                                        <button className="trash" onClick={() => handleTrash(index, item.name)}>🗑️</button>
                                     </div>
                                 </div>
                             </li>
