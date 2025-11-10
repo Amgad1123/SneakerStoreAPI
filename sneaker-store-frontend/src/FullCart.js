@@ -2,60 +2,57 @@
 //import { Link } from 'react-router'
 import "./FullCart.css"
 import CheckoutButton from "./Checkout";
-import { getCartItems } from "./api/CartService";
-export default function FullCart({total, setTotal, cartCount, setCartCount }) {
+import { removeFromCart } from "./api/CartService";
+export default function FullCart({cartItems, setCartItems, total, setTotal, cartCount, setCartCount }) {
     const [shippingPrice, setShippingPrice] = useState(0);
     const [updatedTotal, setUpdatedTotal] = useState(total);
-    const [cartItems, setCartItems] = useState([]);
 
     useEffect(() => {
-        async function loadCart() {
-            const items = await getCartItems();
-            setCartItems(items);
-            const newTotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
-            setTotal(newTotal);
-            setUpdatedTotal(newTotal);
-        }
-        loadCart();
-    }, []);
+        setUpdatedTotal(total + shippingPrice);
+    }, [total, shippingPrice]);
 
 
     function handleIncrement(index) {
-        const items = [...cartItems];
-        items[index].count += 1;
-        setCartItems(items);
-        setTotal(total + items[index].price);
-        setUpdatedTotal(updatedTotal + items[index].price);
-        setCartCount(cartCount + 1);
+        const updatedItems = [...cartItems];
+        updatedItems[index].quantity += 1;
+
+        setCartItems(updatedItems);
+        setCartCount(prev => prev + 1);
+        setTotal(prev => prev + updatedItems[index].price);
+        setUpdatedTotal(prev => prev + updatedItems[index].price);
     }
 
-    function handleDecrement(index) {
-        const items = [...cartItems];
-        const itemPrice = items[index].price;
+    function handleDecrement(index, name) {
+        const updatedItems = [...cartItems];
+        const itemPrice = updatedItems[index].price;
 
-        if (items[index].count <= 1) {
-            setTotal(total - itemPrice);
-            items.splice(index, 1);
+        if (updatedItems[index].quantity <= 1) {
+            removeFromCart(name);
+            setTotal(prev => prev - itemPrice);
+            setUpdatedTotal(prev => prev - itemPrice);
+            updatedItems.splice(index, 1);
         } else {
-            items[index].count -= 1;
-            setTotal(total - itemPrice);
-            setUpdatedTotal(updatedTotal - itemPrice);
+            updatedItems[index].quantity -= 1;
+            setTotal(prev => prev - itemPrice);
+            setUpdatedTotal(prev => prev - itemPrice);
         }
-        setCartCount(cartCount - 1);
-        setCartItems(items);
+
+        setCartCount(prev => prev - 1);
+        setCartItems(updatedItems);
     }
 
-    function handleTrash(index) {
+
+    function handleTrash(index, name) {
         const items = [...cartItems];
         const itemPrice = items[index].price;
-        const itemCount = items[index].count;
+        const itemCount = items[index].quantity;
         items.splice(index, 1);
+        removeFromCart(name)
         setCartItems(items);
         setCartCount(cartCount - itemCount);
         setTotal(total - (itemPrice * itemCount));
         setUpdatedTotal(updatedTotal - (itemPrice * itemCount));
     }
-
     return (
         <>
             <h1 className="cartHeader">Shopping Cart</h1>
@@ -72,10 +69,10 @@ export default function FullCart({total, setTotal, cartCount, setCartCount }) {
                                             <p>${item.price}</p>
                                         </div>
                                         <div className="amount-wrapper">
-                                            <button className="decrement" onClick={() => handleDecrement(index)}>- </button>
-                                            <p className="amount">{item.count}</p>
+                                            <button className="decrement" onClick={() => handleDecrement(index, item.name)}>- </button>
+                                            <p className="amount">{item.quantity}</p>
                                             <button className="increment" onClick={() => handleIncrement(index)}> +</button>
-                                            <button className="trash" onClick={() => handleTrash(index)}>🗑️</button>
+                                            <button className="trash" onClick={() => handleTrash(index, item.name)}>🗑️</button>
                                         </div>
                                     </div>
                                 </li>
@@ -119,7 +116,7 @@ export default function FullCart({total, setTotal, cartCount, setCartCount }) {
                     <div className="total">
                         <p className="total-p">Total</p>
                         <p>${updatedTotal.toFixed(2)}</p>
-                    </div>n
+                    </div>
                     <CheckoutButton cartItems={cartItems} shippingPrice={shippingPrice}>
 
                     </CheckoutButton>

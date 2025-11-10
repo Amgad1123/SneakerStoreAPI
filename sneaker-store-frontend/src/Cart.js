@@ -1,29 +1,15 @@
 ﻿import React from "react";
 import { Link  } from 'react-router';
 import "./Cart.css";
-import { useState, useEffect } from "react";
-import { getCartItems, removeFromCart } from "./api/CartService";
+import { removeFromCart } from "./api/CartService";
 
-const Cart = ({ cartItems, setCartItems, total,setTotal, setOpenFullCart, setCartOpen, cartCount, setCartCount }) => {
-   // const [, setCartItems] = useState([]);
-    const [updatedTotal, setUpdatedTotal] = useState(total);
-    useEffect(() => {
-        async function loadCart() {
-            const items = await getCartItems();
-            setCartItems(items);
-            const newTotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
-            setTotal(newTotal);
-            setUpdatedTotal(newTotal);
-        }
-        loadCart();
-    }, []);
+const Cart = ({ cartItems, setCartItems, total, setTotal, setOpenFullCart, setCartOpen, cartCount, setCartCount }) => {
     function handleIncrement(index) {
         const updatedItem = [...cartItems]
         updatedItem[index].quantity += 1
         setCartItems(updatedItem);
         setCartCount(cartCount + 1);
         setTotal(total + updatedItem[index].price);
-        
     }
     function handleCart() {
         setCartOpen(false);
@@ -39,7 +25,6 @@ const Cart = ({ cartItems, setCartItems, total,setTotal, setOpenFullCart, setCar
         setCartItems(items);
         setCartCount(cartCount - itemCount);
         setTotal(total - (itemPrice * itemCount));
-        //setUpdatedTotal(updatedTotal - (itemPrice * itemCount));
     }
     function handleDecrement(index, name) { 
         const items = [...cartItems];
@@ -53,9 +38,7 @@ const Cart = ({ cartItems, setCartItems, total,setTotal, setOpenFullCart, setCar
             setTotal(total - itemPrice);
         }
         setCartCount(cartCount - 1)
-        setCartItems(items);
-
-   
+        setCartItems(items); 
     }
 
     return (
