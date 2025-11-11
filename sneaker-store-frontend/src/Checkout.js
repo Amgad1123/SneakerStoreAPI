@@ -3,22 +3,24 @@
 const CheckoutButton = ({ cartItems, shippingPrice }) => {
     const handleCheckout = async () => {
         try {
-            // 🧾 Map your cartItems to the structure Stripe expects
+            //  Map cartItems to the structure Stripe expects
             let items = cartItems.map(item => ({
                 name: item.name,
                 price: item.price,
-                quantity: item.count,
+                quantity: item.quantity,
+                imageUrl: item.imageUrl 
             }));
 
             if (shippingPrice > 0) {
                 items.push({
                     name: "Express Shipping",
-                    price: shippingPrice,
-                    quantity: 1
+                    price: Number(shippingPrice),
+                    quantity: 1,
+                    imageUrl: "https://yourdomain.com/images/shipping-icon.png"
                 });
             }
 
-            // 🎯 Call backend to create checkout session
+            // Call backend to create checkout session
             const response = await fetch("http://localhost:5158/api/payments/create-checkout-session", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -29,7 +31,7 @@ const CheckoutButton = ({ cartItems, shippingPrice }) => {
 
             const data = await response.json();
 
-            // 🚀 Redirect to Stripe Checkout
+            // Redirect to Stripe Checkout
             window.location.href = data.url;
         } catch (error) {
             console.error("Checkout error:", error);

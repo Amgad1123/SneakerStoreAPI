@@ -23,9 +23,10 @@ public class PaymentsController : ControllerBase
                 ProductData = new SessionLineItemPriceDataProductDataOptions
                 {
                     Name = item.Name,
+                    Images = new List<string> { item.ImageUrl }
                 },
             },
-            Quantity = item.Quantity,
+            Quantity = item.Quantity, 
         }).ToList();
 
         var options = new SessionCreateOptions
