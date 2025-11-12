@@ -1,5 +1,5 @@
 # Use the official .NET SDK image to build the app
-FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /app
 
 # Copy everything and restore dependencies
@@ -8,7 +8,7 @@ RUN dotnet restore ./SneakerStoreAPI.csproj
 RUN dotnet publish ./SneakerStoreAPI.csproj -c Release -o out
 
 # Use the smaller runtime image for production
-FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS runtime
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
 WORKDIR /app
 
 # Copy the published output from the build stage
