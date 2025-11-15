@@ -5,7 +5,7 @@ const SneakerList = ({ searchTerm, selectedBrand, maxPrice, onAddToCart, setCart
     const [sneakers, setSneakers] = useState([]);
 
     useEffect(() => {
-        fetch("/api/sneakers")
+        fetch("https://sneakerstoreapi.onrender.com/api/sneakers")
             .then((res) => res.json())
             .then((data) => setSneakers(data))
             .catch((err) => console.error("Error fetching sneakers:", err));

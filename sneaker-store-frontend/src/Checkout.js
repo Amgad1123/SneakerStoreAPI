@@ -21,7 +21,7 @@ const CheckoutButton = ({ cartItems, shippingPrice }) => {
             }
 
             // Call backend to create checkout session
-            const response = await fetch("http://localhost:5158/api/payments/create-checkout-session", {
+            const response = await fetch("https://sneakerstoreapi.onrender.com/api/payments/create-checkout-session", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ items }),

@@ -47,7 +47,7 @@ export default function Login() {
             const decoded = jwtDecode(token);
             console.log("Google decoded user:", decoded);
 
-            const res = await fetch("http://localhost:5158/api/auth/google", {
+            const res = await fetch("https://sneakerstoreapi.onrender.com/api/auth/google", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ token }),

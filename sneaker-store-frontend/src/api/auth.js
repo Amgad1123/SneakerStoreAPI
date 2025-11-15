@@ -1,4 +1,4 @@
-﻿const API_BASE_URL = "http://localhost:5158";
+﻿const API_BASE_URL = "https://sneakerstoreapi.onrender.com";
 
 export async function registerUser(email, password) {
     const response = await fetch(`${API_BASE_URL}/api/auth/register`, {

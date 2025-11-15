@@ -1,4 +1,4 @@
-﻿const API_URL = "http://localhost:5158/api/cart";
+﻿const API_URL = "https://sneakerstoreapi.onrender.com/api/cart";
 
 export async function getCartItems() {
     const res = await fetch(API_URL);
@@ -6,7 +6,7 @@ export async function getCartItems() {
 }
 
 export async function addToCart(item) {
-    const res = await fetch("http://localhost:5158/api/cart", {
+    const res = await fetch("https://sneakerstoreapi.onrender.com/api/cart", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
