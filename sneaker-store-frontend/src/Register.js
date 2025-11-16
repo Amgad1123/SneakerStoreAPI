@@ -16,8 +16,10 @@ export default function Register() {
             navigate("/Login");
         } catch (err) {
             const container = document.getElementById("errorList");
-            // Get the error(s) and map it/them in a list 
-            container.innerHTML = err
+
+            const errors = Array.isArray(err) ? err : [err];
+
+            container.innerHTML = errors
                 .map(e => `<li style="color:red;">${e}</li>`)
                 .join("");
         }

@@ -1,5 +1,4 @@
 ﻿import React, { useState, useEffect } from "react";
-//import { Link } from 'react-router'
 import "./FullCart.css"
 import CheckoutButton from "./Checkout";
 import { removeFromCart } from "./api/CartService";

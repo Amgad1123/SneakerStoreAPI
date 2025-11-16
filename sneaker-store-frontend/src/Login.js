@@ -5,12 +5,18 @@ import { Link } from 'react-router';
 import { loginUser } from "./api/auth";
 import { useNavigate } from "react-router-dom";
 import "./Register.css";
-export default function Login() {
+import { removeFromCart } from "./api/CartService";
+export default function Login({ cartItems }) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [message, setMessage] = useState("");
     const navigate = useNavigate();
 
+    function clearCart() {
+        cartItems.forEach(item => {
+            removeFromCart(item.name);
+        })
+    }
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
@@ -39,6 +45,7 @@ export default function Login() {
              registerButton.style.display = "inline-block";
              loginButton.style.display = "inline-block";
              logoutButton.style.display = "none";
+             clearCart();
          });
     }
     const handleGoogleSuccess = async (credentialResponse) => {

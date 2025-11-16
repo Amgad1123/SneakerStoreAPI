@@ -2,17 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
 namespace SneakerStoreAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250623224953_ReseedSneakers")]
-    partial class ReseedSneakers
+    [Migration("20251115231949_PostgreCreate")]
+    partial class PostgreCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -20,26 +20,37 @@ namespace SneakerStoreAPI.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "9.0.5")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+                .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("SneakerStoreAPI.Models.CartItem", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Image")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("numeric");
 
                     b.Property<int>("Quantity")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<int>("SneakerId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<int>("UserId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -54,18 +65,18 @@ namespace SneakerStoreAPI.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("OrderDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<decimal>("TotalAmount")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("numeric");
 
                     b.Property<int>("UserId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -78,21 +89,21 @@ namespace SneakerStoreAPI.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("OrderId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("numeric");
 
                     b.Property<int>("Quantity")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<int>("SneakerId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -107,24 +118,24 @@ namespace SneakerStoreAPI.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Brand")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("ImageUrl")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("numeric");
 
                     b.HasKey("Id");
 
@@ -133,7 +144,15 @@ namespace SneakerStoreAPI.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 1,
+                            Id = 13,
+                            Brand = "Jordan",
+                            ImageUrl = "https://cdn.flightclub.com/TEMPLATE/011502/1.jpg?w=1920",
+                            Name = "Retro Cement 3",
+                            Price = 300m
+                        },
+                        new
+                        {
+                            Id = 14,
                             Brand = "Jordan",
                             ImageUrl = "https://cdn.flightclub.com/TEMPLATE/307016/1.jpg?w=1920",
                             Name = "Air Jordan 1",
@@ -141,7 +160,7 @@ namespace SneakerStoreAPI.Migrations
                         },
                         new
                         {
-                            Id = 2,
+                            Id = 15,
                             Brand = "Nike",
                             ImageUrl = "https://cdn.flightclub.com/TEMPLATE/253215/1.jpg?w=1920",
                             Name = "Nike Dunk Low",
@@ -149,7 +168,7 @@ namespace SneakerStoreAPI.Migrations
                         },
                         new
                         {
-                            Id = 3,
+                            Id = 16,
                             Brand = "Adidas",
                             ImageUrl = "https://cdn.flightclub.com/TEMPLATE/368573/1.jpg?w=1920",
                             Name = "Yeezy Boost 350",
@@ -157,7 +176,7 @@ namespace SneakerStoreAPI.Migrations
                         },
                         new
                         {
-                            Id = 4,
+                            Id = 17,
                             Brand = "New Balance",
                             ImageUrl = "https://cdn.flightclub.com/TEMPLATE/371711/1.jpg?w=1920",
                             Name = "New Balance 550",
@@ -165,7 +184,7 @@ namespace SneakerStoreAPI.Migrations
                         },
                         new
                         {
-                            Id = 5,
+                            Id = 18,
                             Brand = "Adidas",
                             ImageUrl = "https://cdn.flightclub.com/TEMPLATE/460574/1.jpg?w=1920",
                             Name = "Adidas Samba OG",
@@ -173,7 +192,7 @@ namespace SneakerStoreAPI.Migrations
                         },
                         new
                         {
-                            Id = 7,
+                            Id = 19,
                             Brand = "Puma",
                             ImageUrl = "https://cdn.flightclub.com/TEMPLATE/397161/1.jpg?w=1920",
                             Name = "Puma RS-X",
@@ -181,7 +200,7 @@ namespace SneakerStoreAPI.Migrations
                         },
                         new
                         {
-                            Id = 8,
+                            Id = 20,
                             Brand = "Converse",
                             ImageUrl = "https://cdn.flightclub.com/TEMPLATE/301688/1.jpg?w=1920",
                             Name = "Converse Chuck 70",
@@ -189,7 +208,7 @@ namespace SneakerStoreAPI.Migrations
                         },
                         new
                         {
-                            Id = 9,
+                            Id = 21,
                             Brand = "Reebok",
                             ImageUrl = "https://cdn.flightclub.com/TEMPLATE/363222/1.jpg?w=1920",
                             Name = "Reebok Club C 85",
@@ -197,7 +216,7 @@ namespace SneakerStoreAPI.Migrations
                         },
                         new
                         {
-                            Id = 10,
+                            Id = 22,
                             Brand = "Asics",
                             ImageUrl = "https://cdn.flightclub.com/TEMPLATE/389891/1.jpg?w=1920",
                             Name = "Asics Gel-Lyte III",
@@ -205,7 +224,7 @@ namespace SneakerStoreAPI.Migrations
                         },
                         new
                         {
-                            Id = 11,
+                            Id = 23,
                             Brand = "Vans",
                             ImageUrl = "https://cdn.flightclub.com/TEMPLATE/350502/1.jpg?w=1920",
                             Name = "Vans Old Skool",
@@ -213,19 +232,11 @@ namespace SneakerStoreAPI.Migrations
                         },
                         new
                         {
-                            Id = 12,
+                            Id = 24,
                             Brand = "New Balance",
                             ImageUrl = "https://cdn.flightclub.com/TEMPLATE/350162/1.jpg?w=1920",
                             Name = "New Balance 2002R",
                             Price = 160m
-                        },
-                        new
-                        {
-                            Id = 13,
-                            Brand = "Jordan",
-                            ImageUrl = "https://cdn.flightclub.com/TEMPLATE/011502/1.jpg?w=1920",
-                            Name = "Retro Cement 3",
-                            Price = 300m
                         });
                 });
 
@@ -233,17 +244,17 @@ namespace SneakerStoreAPI.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("PasswordHash")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 

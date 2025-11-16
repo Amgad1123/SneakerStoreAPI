@@ -10,7 +10,7 @@ export async function registerUser(email, password) {
     const data = await response.json();
 
     if (!response.ok) {
-        throw data.errors;
+        throw data.errors || [data.message] || ["Registration failed"];
     }
 
     return "User registered successfully!";

@@ -1,6 +1,12 @@
 ﻿import React from "react";
+import { removeFromCart } from "./api/CartService";
 
 const CheckoutButton = ({ cartItems, shippingPrice }) => {
+    function clearCart() {
+        cartItems.forEach(item => {
+            removeFromCart(item.name);
+        })
+    }
     const handleCheckout = async () => {
         try {
             //  Map cartItems to the structure Stripe expects
@@ -33,6 +39,7 @@ const CheckoutButton = ({ cartItems, shippingPrice }) => {
 
             // Redirect to Stripe Checkout
             window.location.href = data.url;
+            clearCart();
         } catch (error) {
             console.error("Checkout error:", error);
             alert("Checkout failed. Please try again.");

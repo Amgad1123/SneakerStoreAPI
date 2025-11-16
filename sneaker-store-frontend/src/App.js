@@ -94,7 +94,7 @@ function App() {
                     />}></Route>
 
                 <Route path="/Login" element={
-                    <Login
+                    <Login cartItems={cartItems }
 
                     />}></Route>
                 <Route path="/success" element={<h2>✅ Payment successful! Thank you for your purchase.</h2>} />
