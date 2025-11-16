@@ -21,7 +21,7 @@ export default function Login({ cartItems }) {
         e.preventDefault();
         try {
             const data = await loginUser(email, password);
-            localStorage.setItem("token", data.token); // ✅ Store JWT
+            localStorage.setItem("token", data.token); //  Store JWT
             logout();
             navigate("/")
             alert("Login successful!");

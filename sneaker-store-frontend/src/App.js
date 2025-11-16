@@ -96,8 +96,8 @@ function App() {
                     <Login cartItems={cartItems }
 
                     />}></Route>
-                <Route path="/success" element={<h2>✅ Payment successful! Thank you for your purchase.</h2>} />
-                <Route path="/cancel" element={<h2>❌ Payment canceled. Try again later.</h2>} />
+                <Route path="https://sneakerstoreapi.onrender.com/success" element={<h2>✅ Payment successful! Thank you for your purchase.</h2>} />
+                <Route path="https://sneakerstoreapi.onrender.com/cancel" element={<h2>❌ Payment canceled. Try again later.</h2>} />
             </Routes>
            
 

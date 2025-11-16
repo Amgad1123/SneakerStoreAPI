@@ -30,5 +30,5 @@ export async function loginUser(email, password) {
         throw new Error(message || "Failed to login");
     }
 
-    return await response.json(); // { token: "..." }
+    return await response.json(); 
 }
