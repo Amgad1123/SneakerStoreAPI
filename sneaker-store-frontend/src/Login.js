@@ -42,10 +42,10 @@ export default function Login({ cartItems }) {
          logoutButton.setAttribute("style", "background: transparent; color: #fff; border: 1px solid #fff; padding: 0.5rem; cursor: pointer; text - decoration: none; ")
          nav.append(logoutButton);
          logoutButton.addEventListener("click", () => {
+             clearCart();
              registerButton.style.display = "inline-block";
              loginButton.style.display = "inline-block";
-             logoutButton.style.display = "none";
-             clearCart();
+             logoutButton.style.display = "none";  
          });
     }
     const handleGoogleSuccess = async (credentialResponse) => {

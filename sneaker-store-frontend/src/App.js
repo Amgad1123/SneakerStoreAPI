@@ -35,6 +35,7 @@ function App() {
             } else {
                 // New sneaker, add with count = 1
                 await addToCart({
+                    id: sneaker.id,
                     name: sneaker.name,
                     price: sneaker.price,
                     quantity: 1,
@@ -45,8 +46,6 @@ function App() {
             // Refresh the cart from backend
             const updatedCart = await getCartItems();
             setCartItems(updatedCart);
-
-            console.log(cartItems)
             // Recalculate total
             const newTotal = updatedCart.reduce(
                 (sum, item) => sum + item.price * item.quantity,
