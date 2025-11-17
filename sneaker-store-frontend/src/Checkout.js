@@ -40,7 +40,6 @@ const CheckoutButton = ({ cartItems, shippingPrice }) => {
             // Redirect to Stripe Checkout
             window.location.href = data.url;
             clearCart();
-            alert("Checkout successful!");
         } catch (error) {
             console.error("Checkout error:", error);
             alert("Checkout failed. Please try again.");
