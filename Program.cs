@@ -43,19 +43,17 @@ namespace SneakerStoreAPI
 
             builder.Services.AddControllers();
 
-            // CORS
+            // CORS — CLEAN VERSION
             builder.Services.AddCors(options =>
             {
-                options.AddPolicy("AllowFrontend", policy =>
-                {
-                    policy
-                        .WithOrigins(
-                            "http://localhost:3000",
-                            "https://sage-sorbet-7a2878.netlify.app"
-                        )
-                        .AllowAnyHeader()
-                        .AllowAnyMethod();
-                });
+                options.AddPolicy("AllowAll",
+                    policy =>
+                    {
+                        policy
+                            .AllowAnyOrigin()
+                            .AllowAnyHeader()
+                            .AllowAnyMethod();
+                    });
             });
 
             var app = builder.Build();
@@ -64,7 +62,7 @@ namespace SneakerStoreAPI
             app.UseStaticFiles();
             app.UseRouting();
 
-            app.UseCors("AllowFrontend");
+            app.UseCors("AllowAll");
 
             app.UseAuthentication();
             app.UseAuthorization();
